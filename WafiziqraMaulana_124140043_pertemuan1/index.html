@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini POS Kantin Kampus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Mini POS Kantin</h1>
+    <p>Catat belanja, hitung total, dan kembalian.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel" aria-labelledby="judul-form">
+      <h2 id="judul-form">Tambah barang</h2>
+      <form id="form-barang" novalidate>
+        <div class="field">
+          <label for="nama">Nama barang</label>
+          <input type="text" id="nama" placeholder="Contoh: Buku Tulis">
+          <p class="error" id="err-nama" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="harga">Harga satuan (Rp)</label>
+          <input type="number" id="harga" placeholder="Minimal 500" min="500">
+          <p class="error" id="err-harga" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="qty">Jumlah</label>
+          <input type="number" id="qty" placeholder="Minimal 1" min="1" step="1">
+          <p class="error" id="err-qty" role="alert"></p>
+        </div>
+        <button type="submit" class="btn primary">Tambah ke keranjang</button>
+      </form>
+    </section>
+
+    <section class="panel wide" aria-labelledby="judul-keranjang">
+      <h2 id="judul-keranjang">Keranjang belanja</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>No</th><th>Nama Barang</th><th class="num">Harga Satuan</th><th class="num">Qty</th><th class="num">Subtotal</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="isi-keranjang"></tbody>
+        </table>
+      </div>
+
+      <dl class="ringkasan">
+        <div><dt>Total belanja</dt><dd id="total">Rp0</dd></div>
+        <div><dt id="label-diskon">Diskon</dt><dd id="diskon">Rp0</dd></div>
+        <div class="grand"><dt>Total akhir</dt><dd id="total-akhir">Rp0</dd></div>
+      </dl>
+
+      <div class="field">
+        <label for="kode">Kode promo (opsional)</label>
+        <input type="text" id="kode" placeholder="HEMAT10">
+      </div>
+      <div class="field">
+        <label for="bayar">Uang bayar (Rp)</label>
+        <input type="number" id="bayar" placeholder="Nominal uang diterima" min="0">
+      </div>
+      <p id="kembalian" class="kembalian" aria-live="polite"></p>
+
+      <button type="button" id="btn-reset" class="btn danger">Transaksi baru</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

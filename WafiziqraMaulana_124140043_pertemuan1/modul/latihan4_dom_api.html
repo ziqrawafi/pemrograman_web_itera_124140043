@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Latihan 4 - DOM, API, localStorage</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:20px auto;padding:0 14px;line-height:1.5}h2{border-bottom:2px solid #1f6f50;padding-bottom:4px;margin-top:28px}section{margin-bottom:10px}input,button,select{padding:7px 9px;font:inherit;margin:2px}button{cursor:pointer}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}pre{background:#f3f5f4;padding:10px;white-space:pre-wrap}.err{color:#c0392b}.ok{color:#1f6f50}body.dark{background:#161a18;color:#e8ece9}body.dark pre{background:#222826}body.dark input,body.dark button{background:#2a312e;color:#e8ece9;border:1px solid #555}body.dark th,body.dark td{border-color:#555}</style></head>
+<body>
+<h1>Latihan 4: DOM, API & localStorage</h1>
+<button id="btn-dark">Dark mode</button>
+
+<h2>1-2. Form mahasiswa + localStorage</h2>
+<input id="m-nama" placeholder="Nama"> <input id="m-nim" placeholder="NIM (8 digit)"> <input id="m-jurusan" placeholder="Jurusan">
+<button id="m-tambah">Tambah</button>
+<p id="m-err" class="err"></p>
+<table><thead><tr><th>Nama</th><th>NIM</th><th>Jurusan</th><th>Aksi</th></tr></thead><tbody id="m-body"></tbody></table>
+
+<h2>3 & 5. Daftar post (search + pagination)</h2>
+<input id="cari" placeholder="Cari berdasarkan title...">
+<div id="posts"></div>
+<button id="prev">Previous</button> <span id="hal"></span> <button id="next">Next</button>
+
+<h2>6. Todo list</h2>
+<input id="todo-input" placeholder="Tugas baru"> <button id="todo-tambah">Tambah</button>
+<ul id="todo-list"></ul>
+
+<script>
+const $ = (id) => document.getElementById(id);
+function baca(kunci) {
+  try { return JSON.parse(localStorage.getItem(kunci)) || []; } catch (e) { return []; }
+}
+
+// ===== 4. Dark mode (toggle class CSS, disimpan) =====
+if (localStorage.getItem("tema") === "dark") document.body.classList.add("dark");
+$("btn-dark").onclick = () => {
+  const gelap = document.body.classList.toggle("dark");
+  localStorage.setItem("tema", gelap ? "dark" : "light");
+};
+
+// ===== 1-2. Form mahasiswa dengan validasi + localStorage =====
+let daftarMhs = baca("mahasiswa");
+function renderMhs() {
+  const body = $("m-body");
+  body.innerHTML = "";
+  daftarMhs.forEach((m, i) => {
+    const tr = document.createElement("tr");
+    [m.nama, m.nim, m.jurusan].forEach(v => {
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    });
+    const td = document.createElement("td");
+    const b = document.createElement("button");
+    b.textContent = "Hapus";
+    b.onclick = () => { daftarMhs.splice(i, 1); simpanMhs(); };
+    td.appendChild(b);
+    tr.appendChild(td);
+    body.appendChild(tr);
+  });
+}
+function simpanMhs() {
+  localStorage.setItem("mahasiswa", JSON.stringify(daftarMhs));
+  renderMhs();
+}
+$("m-tambah").onclick = () => {
+  const nama = $("m-nama").value.trim();
+  const nim = $("m-nim").value.trim();
+  const jurusan = $("m-jurusan").value.trim();
+  let pesan = "";
+  if (nama.length < 3) pesan = "Nama minimal 3 karakter.";
+  else if (!/^\d{8}$/.test(nim)) pesan = "NIM harus 8 digit angka.";
+  else if (!jurusan) pesan = "Jurusan wajib diisi.";
+  else if (daftarMhs.some(m => m.nim === nim)) pesan = "NIM sudah terdaftar.";
+  $("m-err").textContent = pesan;
+  if (pesan) return;
+  daftarMhs.push({ nama, nim, jurusan });
+  simpanMhs();
+  ["m-nama", "m-nim", "m-jurusan"].forEach(id => $(id).value = "");
+};
+renderMhs();
+
+// ===== 3 & 5. Fetch API + search + pagination =====
+const PER_HALAMAN = 5;
+let semuaPost = [];
+let hasilCari = [];
+let halaman = 1;
+
+async function ambilPost() {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+    if (!res.ok) throw new Error("Status " + res.status);
+    semuaPost = await res.json();
+    hasilCari = semuaPost;
+    renderPost();
+  } catch (error) {
+    $("posts").textContent = "Gagal mengambil data: " + error.message;
+  }
+}
+function renderPost() {
+  const totalHal = Math.max(1, Math.ceil(hasilCari.length / PER_HALAMAN));
+  halaman = Math.min(halaman, totalHal);
+  const awal = (halaman - 1) * PER_HALAMAN;
+  const box = $("posts");
+  box.innerHTML = "";
+  if (hasilCari.length === 0) box.textContent = "Tidak ada post yang cocok.";
+  hasilCari.slice(awal, awal + PER_HALAMAN).forEach(p => {
+    const div = document.createElement("div");
+    const h = document.createElement("h4");
+    h.textContent = p.title;
+    const isi = document.createElement("p");
+    isi.textContent = p.body;
+    div.append(h, isi);
+    box.appendChild(div);
+  });
+  $("hal").textContent = "Halaman " + halaman + " / " + totalHal;
+  $("prev").disabled = halaman === 1;
+  $("next").disabled = halaman === totalHal;
+}
+$("cari").addEventListener("input", () => {
+  const kata = $("cari").value.trim().toLowerCase();
+  hasilCari = semuaPost.filter(p => p.title.toLowerCase().includes(kata));
+  halaman = 1;
+  renderPost();
+});
+$("prev").onclick = () => { halaman--; renderPost(); };
+$("next").onclick = () => { halaman++; renderPost(); };
+ambilPost();
+
+// ===== 6. Todo list (tambah, hapus, tandai selesai) + localStorage =====
+let todos = baca("todos");
+function renderTodo() {
+  const ul = $("todo-list");
+  ul.innerHTML = "";
+  todos.forEach((t, i) => {
+    const li = document.createElement("li");
+    const cek = document.createElement("input");
+    cek.type = "checkbox";
+    cek.checked = t.selesai;
+    cek.onchange = () => { t.selesai = cek.checked; simpanTodo(); };
+    const teks = document.createElement("span");
+    teks.textContent = t.teks;
+    if (t.selesai) teks.style.textDecoration = "line-through";
+    const hapus = document.createElement("button");
+    hapus.textContent = "Hapus";
+    hapus.onclick = () => { todos.splice(i, 1); simpanTodo(); };
+    li.append(cek, teks, hapus);
+    ul.appendChild(li);
+  });
+}
+function simpanTodo() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+  renderTodo();
+}
+$("todo-tambah").onclick = () => {
+  const teks = $("todo-input").value.trim();
+  if (!teks) return;
+  todos.push({ teks, selesai: false });
+  $("todo-input").value = "";
+  simpanTodo();
+};
+renderTodo();
+</script></body></html>

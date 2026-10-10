@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Latihan 1 - Variabel & Kondisional</title><style>body{font-family:system-ui,sans-serif;max-width:820px;margin:20px auto;padding:0 14px;line-height:1.5}h2{border-bottom:2px solid #1f6f50;padding-bottom:4px;margin-top:28px}section{margin-bottom:10px}input,button,select{padding:7px 9px;font:inherit;margin:2px}button{cursor:pointer}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}pre{background:#f3f5f4;padding:10px;white-space:pre-wrap}.err{color:#c0392b}.ok{color:#1f6f50}body.dark{background:#161a18;color:#e8ece9}body.dark pre{background:#222826}body.dark input,body.dark button{background:#2a312e;color:#e8ece9;border:1px solid #555}body.dark th,body.dark td{border-color:#555}</style></head>
+<body><h1>Latihan 1: Variabel & Kondisional</h1><div id="out"></div>
+<script>
+const out = document.getElementById("out");
+function tampil(judul, isi) {
+  console.log(judul + ": " + isi);
+  out.innerHTML += "<h2>" + judul + "</h2><pre>" + isi + "</pre>";
+}
+
+// 1. Data diri (const dan let)
+const nama = "Budi Santoso";
+const kotaAsal = "Bandar Lampung";
+let umur = 20;
+umur = umur + 1; // let boleh diubah
+tampil("1. Data diri", "Nama: " + nama + "\nUmur: " + umur + "\nKota asal: " + kotaAsal);
+
+// 2. Cek kelulusan (nilai >= 70)
+function cekKelulusan(nilai) {
+  if (nilai >= 70) {
+    return "Lulus";
+  } else {
+    return "Tidak lulus";
+  }
+}
+tampil("2. Kelulusan", "Nilai 75 -> " + cekKelulusan(75) + "\nNilai 65 -> " + cekKelulusan(65));
+
+// 3. Kategori umur
+function kategoriUmur(u) {
+  if (u < 12) return "Anak";
+  else if (u <= 17) return "Remaja";
+  else if (u <= 59) return "Dewasa";
+  else return "Lansia";
+}
+tampil("3. Kategori umur", [8, 15, 30, 65].map(u => u + " tahun -> " + kategoriUmur(u)).join("\n"));
+
+// 4. Switch-case angka hari (1-7) -> nama hari Inggris
+function namaHariInggris(angka) {
+  switch (angka) {
+    case 1: return "Monday";
+    case 2: return "Tuesday";
+    case 3: return "Wednesday";
+    case 4: return "Thursday";
+    case 5: return "Friday";
+    case 6: return "Saturday";
+    case 7: return "Sunday";
+    default: return "Invalid day";
+  }
+}
+tampil("4. Konversi hari", [1, 4, 7, 9].map(a => a + " -> " + namaHariInggris(a)).join("\n"));
+
+// 5. Kalkulator grade dengan ternary
+function hitungGrade(n) {
+  return n >= 90 ? "A" : n >= 80 ? "B" : n >= 70 ? "C" : n >= 60 ? "D" : "E";
+}
+tampil("5. Grade (ternary)", [95, 85, 72, 61, 40].map(n => n + " -> " + hitungGrade(n)).join("\n"));
+</script></body></html>
