@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Tugas Kuliah</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1>Dashboard Tugas Kuliah</h1>
+        <p id="quote" class="quote">Memuat kutipan…</p>
+      </div>
+      <p id="weather" class="weather">Memuat cuaca ITERA…</p>
+    </header>
+
+    <section id="stats" class="stats" aria-live="polite"></section>
+
+    <form id="taskForm" class="form">
+      <input id="title" placeholder="Nama tugas" required maxlength="80">
+      <input id="course" placeholder="Mata kuliah" maxlength="40">
+      <input id="deadline" type="date">
+      <button id="saveBtn" type="submit">Tambah tugas</button>
+      <button id="cancelBtn" type="button" hidden>Batal</button>
+    </form>
+
+    <nav class="filters" aria-label="Filter tugas">
+      <button data-filter="all" class="on">Semua</button>
+      <button data-filter="pending">Belum selesai</button>
+      <button data-filter="done">Selesai</button>
+    </nav>
+
+    <ul id="list" class="list"></ul>
+  </main>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
