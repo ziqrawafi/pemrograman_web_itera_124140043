@@ -1,0 +1,39 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; color: #333; line-height: 1.6; }
+.container { max-width: 720px; margin: 1.5rem auto; padding: 0 1rem; }
+
+.navbar { background: #1e293b; padding: 1rem 0; }
+.navbar .container { margin: 0 auto; }
+.nav-inner { display: flex; justify-content: space-between; align-items: center; }
+.logo { color: white; font-weight: 700; font-size: 1.2rem; }
+.nav-links { display: flex; list-style: none; gap: 1.5rem; }
+.nav-links a { color: #cbd5e1; text-decoration: none; }
+.nav-links a.active, .nav-links a:hover { color: #38bdf8; }
+
+.book-form { background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.book-form h2 { margin-bottom: 0.5rem; }
+input, select { padding: 0.6rem 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+.input-error { border-color: #ef4444; background: #fef2f2; }
+.error-text { color: #ef4444; font-size: 0.85rem; }
+.form-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+
+.btn { padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 6px; background: white; cursor: pointer; }
+.btn-primary { background: #3498db; color: white; border-color: #3498db; }
+.btn-danger { background: #ef4444; color: white; border-color: #ef4444; }
+
+.book-filter { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.book-filter input { flex: 1; }
+
+.book-list { list-style: none; }
+.book-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 0.9rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem; }
+.book-item p { color: #64748b; font-size: 0.9rem; }
+.item-actions { display: flex; gap: 0.4rem; }
+.badge { display: inline-block; font-size: 0.75rem; padding: 0.1rem 0.6rem; border-radius: 999px; color: white; }
+.badge-milik { background: #10b981; }
+.badge-baca { background: #f59e0b; }
+.badge-beli { background: #6366f1; }
+.empty-message { text-align: center; padding: 2rem; background: white; border: 1px dashed #cbd5e1; border-radius: 8px; color: #64748b; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card span { display: block; font-size: 2rem; font-weight: 700; color: #0284c7; }
